@@ -3,27 +3,30 @@ import math,string,itertools,fractions,heapq,collections,re,array,bisect
 
 class TwoDiagonals:
     def maxPoints(self, x, y):
-        max = 0
-        for i in range(len(x)):
-            b1 = y[i] - x[i]
-            for j in range(len(x)):
-                if i == j:
-                    continue
-                b2 = y[j] + x[j]
-                t = 2
-                l = [i, j]
-                for k in range(len(x)):
+        N = len(x)
+        A = {}
+        B = {}
+        AB = {}
+        Xs = []
+        Ys = []
+        for i in range(N):
+            X = x[i] - y[i]
+            Y = x[i] + y[i]
+            A[X] = A.get(X, 0) + 1
+            B[Y] = B.get(Y, 0) + 1
+            AB['{},{}'.format(X, Y)] = AB.get('{},{}'.format(X, Y), 0) + 1
+            if X not in Xs:
+                Xs.append(X)
+            if Y not in Ys:
+                Ys.append(Y)
 
-                    if k == i or k == j:
-                        continue
-                    bk1 = y[k] - x[k]
-                    bk2 = y[k] + x[k]
-                    if (bk1 == b1 or bk2 == b2) and (k not in l):
-                        l.append(k)
-                if len(l) > max:
-                    max = len(l)
 
-        return max
+        res = 0
+        for i in Xs:
+            for j in Ys:
+                res = max(res, A.get(i, 0) + B.get(j, 0) - AB.get('{},{}'.format(i, j), 0))
+        
+        return res
 
 # CUT begin
 # TEST CODE FOR PYTHON {{{
